@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test for vue</title>
+</head>
+<body>
+<div id="cnt">
+	<div v-if="ok"
+    v-finger:tap="tap"
+    v-finger:multipoint-start="multipointStart"
+    v-finger:swipe="swipe"
+    v-finger:pinch="pinch"
+    v-finger:rotate="rotate"
+    v-finger:press-move="pressMove.bind(this, 12)"
+    v-finger:multipoint-end="multipointEnd"
+    v-finger:double-tap="doubleTap"
+    v-finger:single-tap="singleTap"
+
+    v-finger:touch-start="touchStart"
+    v-finger:touch-move="touchMove"
+    v-finger:touch-end="touchEnd"
+    v-finger:touch-cancel="touchCancel"
+  >
+		<div>the element that you want to bind event</div>
+		<div v-finger:long-tap="longTap">this is longTap test demo</div>
+		<div v-finger:tap.stopPropagation="stopTap">this is the stopPropagation demo</div>
+	</div>
+</div>
+<script type="text/javascript" src="flexible.js"></script>
+<script type="text/javascript" src="vue.js"></script>
+<script type="text/javascript" src="alloy-touch.js"></script>
+<script type="text/javascript">
+	// v-figer自定义指令通过stopPropagation字段来阻止冒泡
+
+	// 根据你的移动适配方案来传入相应的值
+	// 例如使用flexible布局时，iphone进行了缩放，缩放倍数为scale，而android没有缩放scale为1。
+	// 假设传入的基础值为30(scale为1时的值)，则需要传入的值为30/scale。
+	// 当视口等于理想视口或者固定值(如：640)，且没有进行视口缩放时，则可以传入一固定值，如30。
+	// 不同的适配方案对视口有不同处理，获取scale方法也不同，对于flexible可以在html元素读data-dpr值dpr。dpr相当于1/scale,故可以用30*dpr。
+	// 30只是一个基础值，具体的值请根据你的项目具体情况修改，如10,20等都可以。
+	var dpr = document.documentElement.getAttribute('data-dpr');
+	Vue.use(AlloyFingerVue, {size: dpr*30});
+  var data = {
+    ok: true
+  };
+
+	var h = new Vue({
+		el: '#cnt',
+    data: data,
+		methods: {
+			tap: function() { console.log('onTap'); },
+      multipointStart: function() { console.log('onMultipointStart'); },
+      longTap: function() { console.log('onLongTap'); },
+      swipe: function(evt) {
+        console.log("swipe" + evt.direction);
+        console.log('onSwipe');
+      },
+      pinch: function(evt) { 
+        console.log(evt.scale);
+        console.log('onPinch'); 
+      },
+      rotate: function(evt) {
+        console.log(evt.angle);
+        console.log('onRotate'); 
+      },
+      pressMove: function(num, evt) {
+        console.log(evt.deltaX);
+        console.log(evt.deltaY);
+        console.log('onPressMove with params:' + num); 
+      },
+      multipointEnd: function() { console.log('onMultipointEnd'); },
+      doubleTap: function() { console.log('onDoubleTap'); },
+      singleTap: function () { console.log('onSingleTap'); },
+
+      touchStart: function() { console.log('onTouchStart'); },
+      touchMove: function() { console.log('onTouchMove'); },
+      touchEnd: function() { console.log('onTouchEnd'); },
+      touchCancel: function() { console.log('onTouchCancel'); },
+			stopTap: function () {console.log('stop tap');}
+		}
+	});
+</script>
+</body>
+</html>

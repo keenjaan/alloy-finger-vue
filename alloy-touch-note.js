@@ -85,6 +85,7 @@
 			this.zoom = 1;              // 初始缩放比例
 			this.isDoubleTap = false;   // 是否双击
 			this.stopPropagation = option.stopPropagation || false; // 是否阻止冒泡
+      this.distance = option.size; // 注入swipe事件滑动的距离
 
 			var noop = function () { }; // 空函数，没有绑定事件时，传入的函数
 
@@ -130,7 +131,7 @@
 					this.touchStart.dispatch(evt);      // 触发touchStart事件
 					if (this.preTapPosition.x !== null) {   
 					// 不是第一次触摸屏幕时，比较两次触摸时间间隔，两次触摸间隔小于250ms，触摸点的距离小于30px时记为双击。
-							this.isDoubleTap = (this.delta > 0 && this.delta <= 250 && Math.abs(this.preTapPosition.x - this.x1) < 30 && Math.abs(this.preTapPosition.y - this.y1) < 30);
+							this.isDoubleTap = (this.delta > 0 && this.delta <= 250 && Math.abs(this.preTapPosition.x - this.x1) < this.distance && Math.abs(this.preTapPosition.y - this.y1) < this.distance);
 					}
 					this.preTapPosition.x = this.x1;    // 将此次的触摸坐标保存到preTapPosition。
 					this.preTapPosition.y = this.y1;
@@ -231,8 +232,8 @@
 					// this.x2或this.y2存在代表触发了move事件。
 					// Math.abs(this.x1 - this.x2)代表在x方向移动的距离。
 					// 故就是在x方向或y方向移动的距离大于30px时则触发swipe事件
-					if ((this.x2 && Math.abs(this.x1 - this.x2) > 30) ||
-							(this.y2 && Math.abs(this.y1 - this.y2) > 30)) {
+					if ((this.x2 && Math.abs(this.x1 - this.x2) > this.distance) ||
+							(this.y2 && Math.abs(this.y1 - this.y2) > this.distance)) {
 							// 计算swipe的方向并写入evt对象。
 							evt.direction = this._swipeDirection(this.x1, this.x2, this.y1, this.y2);
 							this.swipeTimeout = setTimeout(function () {
@@ -327,7 +328,7 @@
 					this.touchEnd.del();
 					this.touchCancel.del();
 					// 重置所有变量
-					this.stopPropagation = this.isLongTap = this.preV = this.pinchStartLen = this.zoom = this.isDoubleTap = this.delta = this.last = this.now = this.tapTimeout = this.singleTapTimeout = this.longTapTimeout = this.swipeTimeout = this.x1 = this.x2 = this.y1 = this.y2 = this.preTapPosition = this.rotate = this.touchStart = this.multipointStart = this.multipointEnd = this.pinch = this.swipe = this.tap = this.doubleTap = this.longTap = this.singleTap = this.pressMove = this.touchMove = this.touchEnd = this.touchCancel = null;
+					this.distance = this.stopPropagation = this.isLongTap = this.preV = this.pinchStartLen = this.zoom = this.isDoubleTap = this.delta = this.last = this.now = this.tapTimeout = this.singleTapTimeout = this.longTapTimeout = this.swipeTimeout = this.x1 = this.x2 = this.y1 = this.y2 = this.preTapPosition = this.rotate = this.touchStart = this.multipointStart = this.multipointEnd = this.pinch = this.swipe = this.tap = this.doubleTap = this.longTap = this.singleTap = this.pressMove = this.touchMove = this.touchEnd = this.touchCancel = null;
 
 					return null;
 			}
@@ -337,7 +338,7 @@
     // 用于vue挂载指令的install函数
     install: function(Vue, options) {
       // options挂载指令时传递的参数
-      
+      var size = options.size; // swipe事件滑动的距离
       // 14中手势命名
       var EVENTMAP = {
         'touch-start': 'touchStart',
@@ -388,7 +389,8 @@
           // 如果没有给该元素添加过事件
           options = {};   // 创建空对象
           options[eventName] = func;  // 添加监听事件的监听函数
-          options.stopPropagation = modifiers.stoppropagation;  // 是否需要组织冒泡
+          options.stopPropagation = modifiers.stoppropagation;  // 是否需要阻止冒泡
+          options.size = size;  // 注入swipe距离
           // 向CACHE中添加监听元素及其监听的事件和函数
           CACHE.push({
             elem: elem,

@@ -77,6 +77,7 @@
 				this.zoom = 1;
 				this.isDoubleTap = false;
 				this.stopPropagation = option.stopPropagation || false;
+        this.distance = option.size;
 
 				var noop = function () { };
 
@@ -119,7 +120,7 @@
 						this.delta = this.now - (this.last || this.now);
 						this.touchStart.dispatch(evt);
 						if (this.preTapPosition.x !== null) {
-								this.isDoubleTap = (this.delta > 0 && this.delta <= 250 && Math.abs(this.preTapPosition.x - this.x1) < 30 && Math.abs(this.preTapPosition.y - this.y1) < 30);
+								this.isDoubleTap = (this.delta > 0 && this.delta <= 250 && Math.abs(this.preTapPosition.x - this.x1) < this.distance && Math.abs(this.preTapPosition.y - this.y1) < this.distance);
 						}
 						this.preTapPosition.x = this.x1;
 						this.preTapPosition.y = this.y1;
@@ -201,8 +202,8 @@
 						}
 
 						//swipe
-						if ((this.x2 && Math.abs(this.x1 - this.x2) > 30) ||
-								(this.y2 && Math.abs(this.y1 - this.y2) > 30))  {
+						if ((this.x2 && Math.abs(this.x1 - this.x2) > this.distance) ||
+								(this.y2 && Math.abs(this.y1 - this.y2) > this.distance))  {
 								evt.direction = this._swipeDirection(this.x1, this.x2, this.y1, this.y2);
 								this.swipeTimeout = setTimeout(function () {
 										self.swipe.dispatch(evt);
@@ -267,34 +268,34 @@
 				},
 
 				destroy: function() {
-						if(this.singleTapTimeout) clearTimeout(this.singleTapTimeout);
-						if(this.tapTimeout) clearTimeout(this.tapTimeout);
-						if(this.longTapTimeout) clearTimeout(this.longTapTimeout);
-						if(this.swipeTimeout) clearTimeout(this.swipeTimeout);
+					if(this.singleTapTimeout) clearTimeout(this.singleTapTimeout);
+					if(this.tapTimeout) clearTimeout(this.tapTimeout);
+					if(this.longTapTimeout) clearTimeout(this.longTapTimeout);
+					if(this.swipeTimeout) clearTimeout(this.swipeTimeout);
 
-						this.element.removeEventListener("touchstart", this.start);
-						this.element.removeEventListener("touchmove", this.move);
-						this.element.removeEventListener("touchend", this.end);
-						this.element.removeEventListener("touchcancel", this.cancel);
+					this.element.removeEventListener("touchstart", this.start);
+					this.element.removeEventListener("touchmove", this.move);
+					this.element.removeEventListener("touchend", this.end);
+					this.element.removeEventListener("touchcancel", this.cancel);
 
-						this.rotate.del();
-						this.touchStart.del();
-						this.multipointStart.del();
-						this.multipointEnd.del();
-						this.pinch.del();
-						this.swipe.del();
-						this.tap.del();
-						this.doubleTap.del();
-						this.longTap.del();
-						this.singleTap.del();
-						this.pressMove.del();
-						this.touchMove.del();
-						this.touchEnd.del();
-						this.touchCancel.del();
+					this.rotate.del();
+					this.touchStart.del();
+					this.multipointStart.del();
+					this.multipointEnd.del();
+					this.pinch.del();
+					this.swipe.del();
+					this.tap.del();
+					this.doubleTap.del();
+					this.longTap.del();
+					this.singleTap.del();
+					this.pressMove.del();
+					this.touchMove.del();
+					this.touchEnd.del();
+					this.touchCancel.del();
 
-						this.stopPropagation = this.isLongTap = this.preV = this.pinchStartLen = this.zoom = this.isDoubleTap = this.delta = this.last = this.now = this.tapTimeout = this.singleTapTimeout = this.longTapTimeout = this.swipeTimeout = this.x1 = this.x2 = this.y1 = this.y2 = this.preTapPosition = this.rotate = this.touchStart = this.multipointStart = this.multipointEnd = this.pinch = this.swipe = this.tap = this.doubleTap = this.longTap = this.singleTap = this.pressMove = this.touchMove = this.touchEnd = this.touchCancel = null;
+					this.distance = this.stopPropagation = this.isLongTap = this.preV = this.pinchStartLen = this.zoom = this.isDoubleTap = this.delta = this.last = this.now = this.tapTimeout = this.singleTapTimeout = this.longTapTimeout = this.swipeTimeout = this.x1 = this.x2 = this.y1 = this.y2 = this.preTapPosition = this.rotate = this.touchStart = this.multipointStart = this.multipointEnd = this.pinch = this.swipe = this.tap = this.doubleTap = this.longTap = this.singleTap = this.pressMove = this.touchMove = this.touchEnd = this.touchCancel = null;
 
-						return null;
+					return null;
 				}
 		};
 

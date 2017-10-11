@@ -1,4 +1,4 @@
-# alloy-finger-vue
+# 喜欢的给个star
 alloy-finger vue版的实现。
 
 1、原版移动端是使用的理想视口布局，实际项目中可能就不是理想视口，如淘宝的flexible，提供了适配的解决方案。

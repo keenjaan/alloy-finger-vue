@@ -1,3 +1,17 @@
+/* AlloyFinger v0.1.10
+ * By dntzhang
+ * Github: https://github.com/AlloyTeam/AlloyFinger
+ */
+
+/* AlloyFinger v0.1.0 for Vue
+ * By june01
+ * Github: https://github.com/AlloyTeam/AlloyFinger
+ */
+
+/* Note By keenjaan
+ * Github: https://github.com/keenjaan
+ */
+
 ;(function () {
   // 计算距离和角度等的数学公式
 

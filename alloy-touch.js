@@ -1,3 +1,8 @@
+/* AlloyFinger v0.1.0 for Vue
+ * By june01
+ * Github: https://github.com/AlloyTeam/AlloyFinger
+ */
+
 ; (function () {  
     function getLen(v) {
         return Math.sqrt(v.x * v.x + v.y * v.y);

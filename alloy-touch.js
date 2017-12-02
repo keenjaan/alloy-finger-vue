@@ -382,7 +382,7 @@
         // for bind the event
         var doUnbindEvent = function(elem) {
           var index = getElemCacheIndex(elem);
-          if(!isNaN(index)) {
+          if(typeof index === 'number' && index >= 0) {
             var delArr = CACHE.splice(index, 1);
             if(delArr.length && delArr[0] && delArr[0].alloyFinger.destroy) {
               delArr[0].alloyFinger.destroy();

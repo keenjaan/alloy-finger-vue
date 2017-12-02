@@ -434,7 +434,7 @@
       // 移除事件监听函数
       var doUnbindEvent = function(elem) {
         var index = getElemCacheIndex(elem);  // 在CACHE中获取elem的index值
-        if(!isNaN(index)) { // 如果元素在CACHE中存在
+        if(typeof index === 'number' && index >= 0) { // 如果元素在CACHE中存在
           var delArr = CACHE.splice(index, 1);  // 删除该条监听事件
           if(delArr.length && delArr[0] && delArr[0].alloyFinger.destroy) {
             delArr[0].alloyFinger.destroy();  // 重置手势alloyFinger对象，停止所有定时器，移除所有监听函数，清空所有变量。
